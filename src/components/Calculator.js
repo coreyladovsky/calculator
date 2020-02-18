@@ -24,6 +24,7 @@ class Calculator extends Component {
                 }
             })
         } else {
+            if(this.state.displayValue.length === 9) return;
             this.setState((prevState) => {
                 if(prevState.displayValue === "0" || this.state.justEval) {
                     return {displayValue: num, justEval: false}
