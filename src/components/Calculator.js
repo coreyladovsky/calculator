@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Display from './Display';
 import Number from './Number';
 import "../css/Calculator.css";
+import * as Decimal from 'decimal.js';
 
 class Calculator extends Component {
     state = {
@@ -34,13 +35,9 @@ class Calculator extends Component {
     }
 
     useDecimal = () => {
-        if(this.state.usedDecimal) {
-            return; 
-        } 
-        // if(this.state.justEval) {
-
-        // }
-          if(this.state.waitingForNewValue || this.state.justEval) {
+        if(this.state.usedDecimal)return; 
+ 
+        if(this.state.waitingForNewValue || this.state.justEval) {
             this.setState((prevState) => {
                 return {
                     previousValue: prevState.displayValue, 
@@ -81,9 +78,9 @@ class Calculator extends Component {
             let display = this.doMath();
             this.setState({
                 displayValue: isNaN(display) ? this.state.displayValue : display.toString(),
-                 waitingForNewValue: false, 
-                 previousValue: null, 
-                 operation: null, 
+                //  waitingForNewValue: false, 
+                 previousValue: this.state.justEval ? this.state.previousValue : this.state.displayValue, 
+                //  operation: null, 
                  justEval: true,
                  usedDecimal: false
                 })
@@ -92,7 +89,7 @@ class Calculator extends Component {
 
     operation = (operation) => {
         if(this.state.operation) {
-            let display = this.doMath();
+            let display = this.doMath(operation);
             if(isNaN(display)) {
                 this.setState({operation, usedDecimal: false})
                 return
@@ -108,22 +105,22 @@ class Calculator extends Component {
             ))
     }
 
-    doMath = () => {
-        const {displayValue, operation, previousValue} = this.state;
+    doMath = (operation = this.state.operation) => {
+        const {displayValue, previousValue} = this.state;
         const display = parseFloat(displayValue) 
         const prev = parseFloat(previousValue)
         switch (operation) {
             case "+":
-                return display + prev
+                return Decimal.add(display, prev)
                 break;
             case "-": 
-                return prev - display 
+                return Decimal.sub(prev, display)
                 break 
             case "x": 
-                return prev * display 
+                return new Decimal(prev).times(display)
                 break 
             case "÷":
-                return prev / display
+                return Decimal.div(prev, display)
                 break 
             default:
                 break;
@@ -137,6 +134,7 @@ class Calculator extends Component {
         return (
         <div className="calculator">
             <Display num={displayValue}/>
+            <Number num={"±"} handleClick={this.flipSign}/>
             <Number num={"±"} handleClick={this.flipSign}/>
             <Number num={"÷"} handleClick={this.operation}/>
             <Number num={"%"} handleClick={this.percent}/>
