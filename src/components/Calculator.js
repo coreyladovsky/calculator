@@ -31,6 +31,14 @@ class Calculator extends Component {
         }
     }
 
+    flipSign = () => {
+        this.setState((prevState) => {
+            return {
+                displayValue: prevState.displayValue * -1
+            }
+        })
+    }
+
     operation = (operation) => {
         if(this.state.operation) {
             let display = this.doMath();
@@ -68,7 +76,11 @@ class Calculator extends Component {
         return (
         <div className="calculator">
             <Display num={displayValue}/>
+            <Number num={"±"} handleClick={this.flipSign}/>
             <Number num={"+"} handleClick={this.operation}/>
+            <Number num={"-"} handleClick={this.operation}/>
+            <Number num={"x"} handleClick={this.operation}/>
+            <Number num={"÷"} handleClick={this.operation}/>
             <Number num={'1'} handleClick={this.handleNumber}/>
             <Number num={'2'} handleClick={this.handleNumber}/>
             <Number num={'3'} handleClick={this.handleNumber}/>
