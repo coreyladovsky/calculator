@@ -8,7 +8,9 @@ class Calculator extends Component {
         displayValue: '0',
         previousValue: null,
         operation: null,
-        waitingForNewValue: false
+        waitingForNewValue: false,
+        justEval: false,
+        usedDecimal: false
     }
 
     handleNumber = (num) => {
@@ -22,13 +24,42 @@ class Calculator extends Component {
             })
         } else {
             this.setState((prevState) => {
-                if(prevState.displayValue === "0") {
-                    return {displayValue: num}
+                if(prevState.displayValue === "0" || this.state.justEval) {
+                    return {displayValue: num, justEval: false}
                 } else {
-                    return {displayValue: prevState.displayValue + num}
+                    return {displayValue: prevState.displayValue + num, justEval: false}
                 }
             });
         }
+    }
+
+    useDecimal = () => {
+        if(this.state.usedDecimal) {
+            return; 
+        } 
+        // if(this.state.justEval) {
+
+        // }
+          if(this.state.waitingForNewValue || this.state.justEval) {
+            this.setState((prevState) => {
+                return {
+                    previousValue: prevState.displayValue, 
+                    displayValue: "0.", 
+                    waitingForNewValue: false,
+                    useDecimal: true,
+                    justEval: false
+                }
+            })
+        } else {
+
+            this.setState((prevState) => {
+                return {
+                    displayValue: prevState.displayValue + ".", 
+                    usedDecimal: true
+                }
+            })
+        }
+
     }
 
     flipSign = () => {
@@ -39,18 +70,40 @@ class Calculator extends Component {
         })
     }
 
+    percent = () => {
+        this.setState((prevState) => ({
+            displayValue: (prevState.displayValue / 100).toString()
+        }))
+    }
+
+    evaluate = () => {
+        if(this.state.operation) {
+            let display = this.doMath();
+            this.setState({
+                displayValue: isNaN(display) ? this.state.displayValue : display.toString(),
+                 waitingForNewValue: false, 
+                 previousValue: null, 
+                 operation: null, 
+                 justEval: true,
+                 usedDecimal: false
+                })
+        }        
+    }
+
     operation = (operation) => {
         if(this.state.operation) {
             let display = this.doMath();
             if(isNaN(display)) {
-                this.setState({operation})
+                this.setState({operation, usedDecimal: false})
                 return
             }
             this.setState({displayValue: display.toString()})
         }
         this.setState((prevState) => (
-            { waitingForNewValue: true, operation, 
-            previousValue: null 
+            { waitingForNewValue: true, 
+                operation, 
+            previousValue: null ,
+            usedDecimal: false
         }
             ))
     }
@@ -85,20 +138,23 @@ class Calculator extends Component {
         <div className="calculator">
             <Display num={displayValue}/>
             <Number num={"±"} handleClick={this.flipSign}/>
-            <Number num={"+"} handleClick={this.operation}/>
-            <Number num={"-"} handleClick={this.operation}/>
-            <Number num={"x"} handleClick={this.operation}/>
             <Number num={"÷"} handleClick={this.operation}/>
-            <Number num={'1'} handleClick={this.handleNumber}/>
-            <Number num={'2'} handleClick={this.handleNumber}/>
-            <Number num={'3'} handleClick={this.handleNumber}/>
-            <Number num={'4'} handleClick={this.handleNumber}/>
-            <Number num={'5'} handleClick={this.handleNumber}/>
-            <Number num={'6'} handleClick={this.handleNumber}/>
+            <Number num={"%"} handleClick={this.percent}/>
             <Number num={'7'} handleClick={this.handleNumber}/>
             <Number num={'8'} handleClick={this.handleNumber}/>
             <Number num={'9'} handleClick={this.handleNumber}/>
+            <Number num={"x"} handleClick={this.operation}/>
+            <Number num={'4'} handleClick={this.handleNumber}/>
+            <Number num={'5'} handleClick={this.handleNumber}/>
+            <Number num={'6'} handleClick={this.handleNumber}/>
+            <Number num={"-"} handleClick={this.operation}/>
+            <Number num={'1'} handleClick={this.handleNumber}/>
+            <Number num={'2'} handleClick={this.handleNumber}/>
+            <Number num={'3'} handleClick={this.handleNumber}/>
+            <Number num={"+"} handleClick={this.operation}/>
             <Number num={'0'} handleClick={this.handleNumber}/>
+            <Number num={'.'} handleClick={this.useDecimal}/>
+            <Number num={'='} handleClick={this.evaluate}/>
         </div>  );
     }
 }
