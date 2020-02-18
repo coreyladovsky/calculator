@@ -15,10 +15,11 @@ class Calculator extends Component {
         if(this.state.waitingForNewValue) {
             this.setState((prevState) => {
                 return {
-                    previousValue: prevState.displayValue
+                    previousValue: prevState.displayValue, 
+                    displayValue: num, 
+                    waitingForNewValue: false
                 }
             })
-            this.setState({displayValue: num, waitingForNewValue: false})
         } else {
             this.setState((prevState) => {
                 if(prevState.displayValue === "0") {
@@ -27,7 +28,6 @@ class Calculator extends Component {
                     return {displayValue: prevState.displayValue + num}
                 }
             });
-
         }
     }
 
@@ -42,9 +42,17 @@ class Calculator extends Component {
     operation = (operation) => {
         if(this.state.operation) {
             let display = this.doMath();
+            if(isNaN(display)) {
+                this.setState({operation})
+                return
+            }
             this.setState({displayValue: display.toString()})
         }
-        this.setState({ waitingForNewValue: true, operation, previousValue: this.state.displayValue })
+        this.setState((prevState) => (
+            { waitingForNewValue: true, operation, 
+            previousValue: null 
+        }
+            ))
     }
 
     doMath = () => {
