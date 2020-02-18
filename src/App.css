@@ -20,3 +20,8 @@
     background-color: #EE9B3E;
     color: #fff;
   }
+
+  .App {
+    display: flex;
+    justify-content: center;
+  }
