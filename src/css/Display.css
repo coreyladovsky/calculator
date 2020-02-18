@@ -1,0 +1,9 @@
+.display {
+    grid-column: 1 / -1;
+    text-align: right;
+    padding: 10px;
+    background: #343434;
+    color: white;
+    font-size: 40px;
+    font-family: sans-serif;
+}

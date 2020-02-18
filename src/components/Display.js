@@ -1,8 +1,9 @@
 import React from 'react';
+import "../css/Display.css";
 
 const Display = ({num}) => {
     return(
-        <div>{num}</div>
+        <div className={"display"}>{num}</div>
     )
 }
 
