@@ -26,14 +26,12 @@ class Calculator extends Component {
 
     handleNumber = (num) => {
         if(this.state.waitingForNewValue) {
-            this.setState((prevState) => {
-                return {
+            this.setState((prevState) => ({
                     previousValue: prevState.displayValue, 
                     displayValue: num, 
                     waitingForNewValue: false,
-                    justCleared: false
-                }
-            })
+                    justCleared: false          
+            }))
         } else {
             if(this.state.displayValue.length === 9) return;
             this.setState((prevState) => {
@@ -56,20 +54,17 @@ class Calculator extends Component {
                     previousValue: prevState.displayValue, 
                     displayValue: "0.", 
                     waitingForNewValue: false,
-                    useDecimal: true,
+                    usedDecimal: true,
                     justEval: false,
                     justCleared: false
                 }
             })
         } else {
-
-            this.setState((prevState) => {
-                return {
+            this.setState((prevState) => ({
                     displayValue: prevState.displayValue + ".", 
                     usedDecimal: true,
                     justCleared: false
-                }
-            })
+            }))
         }
 
     }
@@ -146,8 +141,7 @@ class Calculator extends Component {
         }
     }
 
-    render() {  
-               
+    render() {                   
         const { displayValue, justCleared } = this.state; 
         return (
         <div className="calculator">
