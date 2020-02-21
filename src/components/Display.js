@@ -21,6 +21,10 @@ const Display = ({num}) => {
             }
             return output + "e" +str.slice(plusIdx + 1);
         }
+        if(!Number.isInteger(Number(num))) {
+            return num; 
+        }
+
         let commas = Math.abs(num).toLocaleString();
         return Number(num) < 0 ? "-" + commas : commas
 

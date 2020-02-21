@@ -11,7 +11,24 @@ class Calculator extends Component {
         operation: null,
         waitingForNewValue: false,
         justEval: false,
-        usedDecimal: false
+        usedDecimal: false, 
+        justCleared: true
+    }
+
+    handleClear = (sym) => {
+        if(sym === "C") {
+            this.setState({displayValue: "0", usedDecimal: false, justCleared: true });
+        } else {
+            this.setState({
+                displayValue: '0',
+                previousValue: null,
+                operation: null,
+                waitingForNewValue: false,
+                justEval: false,
+                usedDecimal: false, 
+                justCleared: true
+            })
+        }
     }
 
     handleNumber = (num) => {
@@ -20,16 +37,17 @@ class Calculator extends Component {
                 return {
                     previousValue: prevState.displayValue, 
                     displayValue: num, 
-                    waitingForNewValue: false
+                    waitingForNewValue: false,
+                    justCleared: false
                 }
             })
         } else {
             if(this.state.displayValue.length === 9) return;
             this.setState((prevState) => {
                 if(prevState.displayValue === "0" || this.state.justEval) {
-                    return {displayValue: num, justEval: false}
+                    return {displayValue: num, justEval: false, justCleared: false}
                 } else {
-                    return {displayValue: prevState.displayValue + num, justEval: false}
+                    return {displayValue: prevState.displayValue + num, justEval: false, justCleared: false}
                 }
             });
         }
@@ -45,7 +63,8 @@ class Calculator extends Component {
                     displayValue: "0.", 
                     waitingForNewValue: false,
                     useDecimal: true,
-                    justEval: false
+                    justEval: false,
+                    justCleared: false
                 }
             })
         } else {
@@ -53,7 +72,8 @@ class Calculator extends Component {
             this.setState((prevState) => {
                 return {
                     displayValue: prevState.displayValue + ".", 
-                    usedDecimal: true
+                    usedDecimal: true,
+                    justCleared: false
                 }
             })
         }
@@ -63,7 +83,7 @@ class Calculator extends Component {
     flipSign = () => {
         this.setState((prevState) => {
             return {
-                displayValue: prevState.displayValue * -1
+                displayValue: prevState.displayValue * -1,
             }
         })
     }
@@ -79,31 +99,31 @@ class Calculator extends Component {
             let display = this.doMath(this.state.operatione);
             this.setState({
                 displayValue: isNaN(display) ? this.state.displayValue : display.toString(),
-                //  waitingForNewValue: false, 
                  previousValue: this.state.justEval ? this.state.previousValue: this.state.displayValue,
-                //  operation: null, 
                  justEval: true,
-                 usedDecimal: false
+                 usedDecimal: false,
+                 justCleared: false
                 })
         }        
     }
 
     operation = (operand) => {
-        const { operation, previousValue, justEval} = this.state; 
+        const { operation, justEval} = this.state; 
         if(operation && !justEval) {
             let display = this.doMath(operand);
             if(isNaN(display)) {
                 this.setState({operation: operand, usedDecimal: false})
                 return
             } 
-            this.setState({displayValue: display.toString()})
+            this.setState({displayValue: display.toString(), justCleared: false})
         }
         this.setState({
             operation: operand, 
             useDecimal: false,
             waitingForNewValue: true,
             previousValue: this.state.displayValue,
-            justEval: false
+            justEval: false,
+            justCleared: false
         })
     }
 
@@ -115,35 +135,32 @@ class Calculator extends Component {
         switch (operation) {
             case "+":
                 return Decimal.add(display, prev)
-                break;
+               
             case "-": 
                 if(this.state.justEval) {
                     return Decimal.sub(display, prev)
                 }
                 return Decimal.sub(prev, display)
-                break 
             case "x": 
                 return new Decimal(prev).times(display)
-                break 
             case "÷":
               if(this.state.justEval) {
                   return Decimal.div(display, prev)
                 }
                 return Decimal.div(prev, display)
-                break 
             default:
-                break;
+               break;
         }
     }
 
     render() { 
         console.log(this.state);
         
-        const { displayValue } = this.state; 
+        const { displayValue, justCleared } = this.state; 
         return (
         <div className="calculator">
             <Display num={displayValue}/>
-            <Number num={"±"} handleClick={this.flipSign}/>
+            <Number num={justCleared ? "AC" : "C"} handleClick={this.handleClear}/>
             <Number num={"±"} handleClick={this.flipSign}/>
             <Number num={"÷"} handleClick={this.operation}/>
             <Number num={"%"} handleClick={this.percent}/>
