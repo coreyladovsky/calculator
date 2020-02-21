@@ -21,7 +21,7 @@ const Display = ({num}) => {
             }
             return output + "e" +str.slice(plusIdx + 1);
         }
-        if(!Number.isInteger(Number(num))) {
+        if(!Number.isInteger(Number(num)) || num[num.length - 1] === ".") {
             return num; 
         }
 

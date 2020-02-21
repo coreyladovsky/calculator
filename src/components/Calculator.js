@@ -115,7 +115,7 @@ class Calculator extends Component {
                 this.setState({operation: operand, usedDecimal: false})
                 return
             } 
-            this.setState({displayValue: display.toString(), justCleared: false})
+            this.setState({displayValue: display.toString()})
         }
         this.setState({
             operation: operand, 
@@ -123,7 +123,6 @@ class Calculator extends Component {
             waitingForNewValue: true,
             previousValue: this.state.displayValue,
             justEval: false,
-            justCleared: false
         })
     }
 
