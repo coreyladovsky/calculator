@@ -47,3 +47,7 @@
     background-color: darkorange;
     transition: ease-in-out;
 }
+
+#active {
+    background-color: darkorange;
+}

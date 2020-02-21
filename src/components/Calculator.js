@@ -47,7 +47,6 @@ class Calculator extends Component {
 
     useDecimal = () => {
         if(this.state.usedDecimal)return; 
- 
         if(this.state.waitingForNewValue || this.state.justEval) {
             this.setState((prevState) => {
                 return {
@@ -70,11 +69,9 @@ class Calculator extends Component {
     }
 
     flipSign = () => {
-        this.setState((prevState) => {
-            return {
+        this.setState((prevState) => ({
                 displayValue: prevState.displayValue * -1,
-            }
-        })
+        }))
     }
 
     percent = () => {
@@ -85,14 +82,14 @@ class Calculator extends Component {
 
     evaluate = () => {
         if(this.state.operation) {
-            let display = this.doMath(this.state.operatione);
+            let display = this.doMath(this.state.operation);
             this.setState({
                 displayValue: isNaN(display) ? this.state.displayValue : display.toString(),
-                 previousValue: this.state.justEval ? this.state.previousValue: this.state.displayValue,
-                 justEval: true,
-                 usedDecimal: false,
-                 justCleared: false
-                })
+                previousValue: this.state.justEval ? this.state.previousValue: this.state.displayValue,
+                justEval: true,
+                usedDecimal: false,
+                justCleared: false
+            })
         }        
     }
 
@@ -106,13 +103,13 @@ class Calculator extends Component {
             } 
             this.setState({displayValue: display.toString()})
         }
-        this.setState({
+        this.setState((prevState) => ({
             operation: operand, 
             usedDecimal: false,
             waitingForNewValue: true,
-            previousValue: this.state.displayValue,
+            previousValue: prevState.displayValue,
             justEval: false,
-        })
+        }))
     }
 
     doMath = (operation = this.state.operation,
@@ -122,8 +119,7 @@ class Calculator extends Component {
         const prev = parseFloat(previousValue)
         switch (operation) {
             case "+":
-                return Decimal.add(display, prev)
-               
+                return Decimal.add(display, prev)       
             case "-": 
                 if(this.state.justEval) {
                     return Decimal.sub(display, prev)
@@ -141,30 +137,35 @@ class Calculator extends Component {
         }
     }
 
-    render() {                   
-        const { displayValue, justCleared } = this.state; 
+    render() {                           
+        const { displayValue, justCleared, waitingForNewValue, operation, justEval } = this.state; 
+        let activeSym;
+        if( waitingForNewValue) {
+             activeSym = justEval || operation
+        }
+    
         return (
         <div className="calculator">
             <Display num={displayValue}/>
             <Button sym={justCleared ? "AC" : "C"} handleClick={this.handleClear} classStyle={"topBar"}/>
             <Button sym={"±"} handleClick={this.flipSign} classStyle={"topBar"} />
             <Button sym={"%"} handleClick={this.percent} classStyle={"topBar"}/>
-            <Button sym={"÷"} handleClick={this.operation} classStyle={"operand"}/>
+            <Button sym={"÷"} handleClick={this.operation} classStyle={"operand"} activeSym={activeSym}/>
             <Button sym={'7'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'8'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'9'} handleClick={this.handleNumber} classStyle={"regNum"}/>
-            <Button sym={"x"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={'x'} handleClick={this.operation}  classStyle={"operand"} activeSym={activeSym}/>
             <Button sym={'4'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'5'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'6'} handleClick={this.handleNumber} classStyle={"regNum"}/>
-            <Button sym={"-"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={"-"} handleClick={this.operation}  classStyle={"operand"} activeSym={activeSym}/>
             <Button sym={'1'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'2'} handleClick={this.handleNumber} classStyle={"regNum"}/>
             <Button sym={'3'} handleClick={this.handleNumber} classStyle={"regNum"}/>
-            <Button sym={"+"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={"+"} handleClick={this.operation}  classStyle={"operand"} activeSym={activeSym}/>
             <Button sym={'0'} handleClick={this.handleNumber} classStyle={"regNum zero"}/>
             <Button sym={'.'} handleClick={this.useDecimal} classStyle={"regNum"}/>
-            <Button sym={'='} handleClick={this.evaluate}  classStyle={"operand"}/>
+            <Button sym={'='} handleClick={this.evaluate}  classStyle={"operand"} activeSym={activeSym}/>
         </div>  );
     }
 }
