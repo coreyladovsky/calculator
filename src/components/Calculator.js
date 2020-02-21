@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Display from './Display';
-import Number from './Number';
+import Button from './Button';
 import "../css/Calculator.css";
 import * as Decimal from 'decimal.js';
 
@@ -153,32 +153,30 @@ class Calculator extends Component {
         }
     }
 
-    render() { 
-        console.log(this.state);
-        
+    render() {         
         const { displayValue, justCleared } = this.state; 
         return (
         <div className="calculator">
             <Display num={displayValue}/>
-            <Number num={justCleared ? "AC" : "C"} handleClick={this.handleClear}/>
-            <Number num={"±"} handleClick={this.flipSign}/>
-            <Number num={"÷"} handleClick={this.operation}/>
-            <Number num={"%"} handleClick={this.percent}/>
-            <Number num={'7'} handleClick={this.handleNumber}/>
-            <Number num={'8'} handleClick={this.handleNumber}/>
-            <Number num={'9'} handleClick={this.handleNumber}/>
-            <Number num={"x"} handleClick={this.operation}/>
-            <Number num={'4'} handleClick={this.handleNumber}/>
-            <Number num={'5'} handleClick={this.handleNumber}/>
-            <Number num={'6'} handleClick={this.handleNumber}/>
-            <Number num={"-"} handleClick={this.operation}/>
-            <Number num={'1'} handleClick={this.handleNumber}/>
-            <Number num={'2'} handleClick={this.handleNumber}/>
-            <Number num={'3'} handleClick={this.handleNumber}/>
-            <Number num={"+"} handleClick={this.operation}/>
-            <Number num={'0'} handleClick={this.handleNumber}/>
-            <Number num={'.'} handleClick={this.useDecimal}/>
-            <Number num={'='} handleClick={this.evaluate}/>
+            <Button sym={justCleared ? "AC" : "C"} handleClick={this.handleClear} classStyle={"topBar"}/>
+            <Button sym={"±"} handleClick={this.flipSign} classStyle={"topBar"} />
+            <Button sym={"%"} handleClick={this.percent} classStyle={"topBar"}/>
+            <Button sym={"÷"} handleClick={this.operation} classStyle={"operand"}/>
+            <Button sym={'7'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'8'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'9'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={"x"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={'4'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'5'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'6'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={"-"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={'1'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'2'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={'3'} handleClick={this.handleNumber} classStyle={"regNum"}/>
+            <Button sym={"+"} handleClick={this.operation}  classStyle={"operand"}/>
+            <Button sym={'0'} handleClick={this.handleNumber} classStyle={"regNum zero"}/>
+            <Button sym={'.'} handleClick={this.useDecimal} classStyle={"regNum"}/>
+            <Button sym={'='} handleClick={this.evaluate}  classStyle={"operand"}/>
         </div>  );
     }
 }

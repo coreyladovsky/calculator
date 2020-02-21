@@ -3,5 +3,7 @@
     grid-template-columns: repeat(4, 1fr) ;
     grid-template-rows: 2fr repeat(5, 1fr);
     width: 350px;
-
+    align-items: center;
+    text-align: center;
 }
+

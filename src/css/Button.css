@@ -1,0 +1,30 @@
+.Button {
+    height: 100%;
+    vertical-align: middle;
+    border: 2px solid darkgray;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+.Button:focus {
+    outline: darkgray;
+}
+
+.regNum {
+    background-color: #282828;
+    color: white;
+}
+
+.topBar {
+    background-color: #E0E0E6;
+    color: black;
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+.operand {
+    color: white; 
+    background-color: orange;
+}
