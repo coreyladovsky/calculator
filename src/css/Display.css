@@ -2,8 +2,9 @@
     grid-column: 1 / -1;
     text-align: right;
     padding: 10px;
-    background: #343434;
+    background: #282828;
     color: white;
     font-size: 40px;
     font-family: sans-serif;
+    border: 2px solid darkgray;
 }

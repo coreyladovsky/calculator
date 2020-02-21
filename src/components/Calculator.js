@@ -4,8 +4,7 @@ import Button from './Button';
 import "../css/Calculator.css";
 import * as Decimal from 'decimal.js';
 
-class Calculator extends Component {
-    state = {
+const defaultSate = {
         displayValue: '0',
         previousValue: null,
         operation: null,
@@ -15,20 +14,14 @@ class Calculator extends Component {
         justCleared: true
     }
 
+class Calculator extends Component {
+    state = {...defaultSate}
+
     handleClear = (sym) => {
-        if(sym === "C") {
-            this.setState({displayValue: "0", usedDecimal: false, justCleared: true });
-        } else {
-            this.setState({
-                displayValue: '0',
-                previousValue: null,
-                operation: null,
-                waitingForNewValue: false,
-                justEval: false,
-                usedDecimal: false, 
-                justCleared: true
-            })
-        }
+        const nextState = sym === "C" ?
+             {displayValue: "0", usedDecimal: false, justCleared: true }
+            : defaultSate
+        this.setState(nextState)
     }
 
     handleNumber = (num) => {
@@ -44,10 +37,11 @@ class Calculator extends Component {
         } else {
             if(this.state.displayValue.length === 9) return;
             this.setState((prevState) => {
+                const resetJusts = { justCleared: false, justEval: false };
                 if(prevState.displayValue === "0" || this.state.justEval) {
-                    return {displayValue: num, justEval: false, justCleared: false}
+                    return {displayValue: num, ...resetJusts}
                 } else {
-                    return {displayValue: prevState.displayValue + num, justEval: false, justCleared: false}
+                    return {displayValue: prevState.displayValue + num, ...resetJusts}
                 }
             });
         }
