@@ -113,7 +113,7 @@ class Calculator extends Component {
         }
         this.setState({
             operation: operand, 
-            useDecimal: false,
+            usedDecimal: false,
             waitingForNewValue: true,
             previousValue: this.state.displayValue,
             justEval: false,
@@ -146,7 +146,8 @@ class Calculator extends Component {
         }
     }
 
-    render() {         
+    render() {  
+               
         const { displayValue, justCleared } = this.state; 
         return (
         <div className="calculator">
