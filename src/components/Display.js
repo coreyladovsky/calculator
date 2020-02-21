@@ -19,7 +19,11 @@ const Display = ({num}) => {
                 }
             
             }
-            return output + "e" +str.slice(plusIdx + 1);
+            if(output.length) {
+                return output + "e" +str.slice(plusIdx + 1);
+            } else {
+                return str
+            }
         }
         if(!Number.isInteger(Number(num)) || num[num.length - 1] === ".") {
             return num; 

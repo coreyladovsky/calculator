@@ -10,14 +10,28 @@
     outline: darkgray;
 }
 
+.Button:hover {
+    cursor: pointer;
+}
+
 .regNum {
     background-color: #282828;
     color: white;
 }
 
+.regNum:hover {
+    background-color: black;
+    transition: ease-in-out;
+}
+
 .topBar {
     background-color: #E0E0E6;
     color: black;
+}
+
+.topBar:hover {
+    background-color: lightgray;
+    transition: ease-in-out;
 }
 
 .zero {
@@ -27,4 +41,9 @@
 .operand {
     color: white; 
     background-color: orange;
+}
+
+.operand:hover {
+    background-color: darkorange;
+    transition: ease-in-out;
 }
