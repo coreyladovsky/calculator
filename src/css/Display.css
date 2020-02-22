@@ -8,3 +8,12 @@
     font-family: sans-serif;
     border: 2px solid darkgray;
 }
+
+@media only screen and (max-width: 375px) {
+    .display {
+      font-size: 50px;
+      height: 100%;
+      padding-top: 70px;
+
+    }
+}
