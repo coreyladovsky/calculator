@@ -17,6 +17,14 @@ const defaultSate = {
 class Calculator extends Component {
     state = {...defaultSate}
 
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown)
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
     handleClear = (sym) => {
         const nextState = sym === "C" ?
              {displayValue: "0", usedDecimal: false, justCleared: true }
@@ -85,7 +93,7 @@ class Calculator extends Component {
         if(this.state.operation) {
             let display = this.doMath(this.state.operation);
             this.setState({
-                displayValue: isNaN(display) ? this.state.displayValue : display.toString(),
+                displayValue: Number.isNaN(display) ? this.state.displayValue : display.toString(),
                 previousValue: this.state.justEval ? this.state.previousValue: this.state.displayValue,
                 justEval: true,
                 usedDecimal: false,
@@ -118,6 +126,7 @@ class Calculator extends Component {
              previousValue = this.state.previousValue) => {
         const display = parseFloat(displayValue) 
         const prev = parseFloat(previousValue)
+        if(this.state.displayValue === "Error") return "Error"
         switch (operation) {
             case "+":
                 return Decimal.add(display, prev)       
@@ -130,11 +139,59 @@ class Calculator extends Component {
                 return new Decimal(prev).times(display)
             case "÷":
               if(this.state.justEval) {
+                  if(this.state.displayValue === "0"){
+
+                     return "Error"
+                  }
                   return Decimal.div(display, prev)
-                }
+                }         
+                  if(this.state.displayValue === "0"){
+
+                     return "Error"
+                  }
                 return Decimal.div(prev, display)
             default:
                break;
+        }
+    }
+
+    handleKeyDown = (e) => { 
+        switch (e.key) {
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+                this.handleNumber(e.key)
+                break;
+            case "*":
+            case "x":
+            case "/":
+            case "+":
+            case "-":
+                this.operation(e.key)
+                break;
+            case "Enter":
+            case "=":
+                this.evaluate()
+                break;
+            case ".":
+                this.useDecimal();
+                break;
+            case "%":
+                this.percent();
+                break;
+            case "Backspace":
+            case "c":
+                this.handleClear()
+                break;
+            default:
+                break;
         }
     }
 
@@ -146,7 +203,7 @@ class Calculator extends Component {
         }
     
         return (
-        <div className="calculator">
+        <div className="calculator"  onKeyDown={this.handleKeyDown}>
             <Display num={displayValue}/>
             <Button sym={justCleared ? "AC" : "C"} handleClick={this.handleClear} classStyle={"topBar"}/>
             <Button sym={"±"} handleClick={this.flipSign} classStyle={"topBar"} />
