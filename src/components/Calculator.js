@@ -76,7 +76,8 @@ class Calculator extends Component {
 
     percent = () => {
         this.setState((prevState) => ({
-            displayValue: (prevState.displayValue / 100).toString()
+            displayValue: (prevState.displayValue / 100).toString(),
+            justEval: true
         }))
     }
 
