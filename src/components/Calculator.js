@@ -140,7 +140,9 @@ class Calculator extends Component {
                 }
                 return Decimal.sub(prev, display)
             case "x": 
+            case "*": 
                 return new Decimal(prev).times(display)
+            case "/":
             case "÷":
               if(this.state.justEval) {
                   if(this.state.displayValue === "0"){
