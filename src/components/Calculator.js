@@ -103,7 +103,11 @@ class Calculator extends Component {
     }
 
     operation = (operand) => {
-        const { operation, justEval} = this.state; 
+        const { operation, justEval, waitingForNewValue} = this.state; 
+        if(waitingForNewValue) {
+            this.setState({operation: operand})
+            return; 
+        }
         if(operation && !justEval) {
             let display = this.doMath(operand);
             if(isNaN(display)) {
