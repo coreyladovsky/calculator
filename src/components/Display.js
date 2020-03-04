@@ -25,8 +25,9 @@ const Display = ({num}) => {
                 return str
             }
         }
-        if(!Number.isInteger(Number(num)) || num[num.length - 1] === ".") {
-            return num; 
+        if( num[num.length - 1] === ".") {
+            let [preDec, postDec] = num.split(".")
+            return Number(preDec).toLocaleString() + "." + postDec
         }
 
         let commas = Math.abs(num).toLocaleString();
